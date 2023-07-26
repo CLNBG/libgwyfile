@@ -1,0 +1,100 @@
+libgwyfile-1.6 (2023-04-24)
+- Fixed mishandling of GwyLawn "segments" data which should contain twice as
+  many integers than gwyfile 1.5 expected.
+
+libgwyfile-1.5 (2022-02-11)
+- New functions for GwyLawn curve map data type.
+- New functions for GwySelectionProjective selection type.
+- New flag for checking Gwyddion-specific data objects.
+- Examples using gwyfile to send messages over network were improved to handle
+  various failures in realistic situations better.
+- Fixed gwyfile_object_container_enumerate_xyz() trying to access Surfaces as
+  DataFields.
+
+libgwyfile-1.4 (2020-06-08)
+- New functions for item and object copying.
+- A simple example using gwyfile to send messages over network was added.
+- A specific error code for truncated buffers was added.
+- The Win32 library symbol file gwyfile.def was actually updated.
+- Declaration of function gwyfile_object_data_size() was restored.
+- Vim syntax file was added.
+
+libgwyfile-1.3 (2020-06-02)
+- New functions for reading from and writing to memory buffers.
+- New functions for GwySelectionCross selection type.
+- New function for accessing n-th item of an object.
+- Win32 compilation error in gwyfile_set_error_errno() was fixed.
+- Byte swapping when writing files was fixed for big endian machines.
+- Documentation build on Debian was fixed.
+
+libgwyfile-1.2 (2016-04-27)
+- New functions for handling GwySurface and GwySelectionPath data objects were
+  added.
+- New function for enumeration of XYZ data in Gwyddion files was added.
+- Example program readgwy.c was updated to include the new data types.
+- Installing the library (as opposed to embedding it) works meaningfully, i.e.
+  it actually installs the library files and headers now.  A pkg-config file
+  is also installed now.
+
+libgwyfile-1.1 (2016-01-12)
+- gwyfile_item_get_int64() and gwyfile_item_new_internal_int64() were fixed
+  to actually work with 64bit values, not just 32bit.
+- New function gwyfile_check_object() can check for violation of the GWY file
+  format specifications that are not physically enforced during normal
+  libgwyfile usage, and for things that are not violations but should be
+  avoided anyway.
+- New struct GwyfileErrorList was added for gwyfile_check_object() reports.
+- A few error messages are more specific or detailed now.
+- New example, checkgeneric, was added as a simple demonstration of the
+  checking functions.
+- Running tests under valgrind can be disabled by --without-valgrind configure
+  option.
+
+libgwyfile-1.0 (2015-07-13)
+- Special item names for data ownership taking (ending with "(take)") now
+  actually work instead of returning NULL.
+- GwyDataLine data extractor was fixed to extract "res", not "xres".
+- GwySelectionAxis constructor actually returns GwySelectionAxis now, not
+  GwySelectionLattice.
+- Non-standard use of va_arg() was fixed, making convenience constructors and
+  extractors work when compiled with MSVC.
+- The maximum object/item nesting depth has been limited to 200 in file reading
+  to avoid stack overflows.
+- It is safe to call gwyfile_error_clear() with the pointer to an unset error.
+- New functions gwyfile_write_wfile() and gwyfile_read_wfile() were added for
+  Win32 to permit using wide-character file names.
+- A workaround for broken vsnprintf() on Win32 was added to error reporting so
+  detailed errors have now meaningful domains, codes and messages on Win32.
+- Examples were tweaked to compile on Win32 cleanly.
+- Misdetection of Win32 environment by configure was fixed.
+- A gwyfile.def listing exported symbols was added to the distribution for
+  Win32 compilation.
+- MSVC 2015 project files were added to the distribution in the msvc2015
+  subdirectory.
+- Examples are linked as static.
+
+libgwyfile-0.9 (2015-03-31)
+- Many more functions for construction of Gwyddion data objects.
+- The special item names specifying memory handling have changed from e.g.
+  "data-copy" to "data(copy)".  And they actually work now.
+- New functions for extracting information from Gwyddion data objects:
+  gwyfile_object_datafield_get(), gwyfile_object_dataline_get(), etc.
+- New high-level functions for enumeration of channels, volume data, etc. in
+  Gwyddion files.
+- New functions for obtaining the number of items in an object and the list of
+  their names.
+- Construction of item lists, either using gwyfile_object_newv() or when
+  reading files, is no longer quadratic-time on the number of items.
+- Array setter functions correctly update the array length to the new length.
+- gwyfile_item_release_object() unsets the object owner as it should.
+- A confinement error is reported when the end of file is hit unexpectedly in
+  otherwise valid data (previous version reported a system error with zero
+  errno).
+- gwyfile_fread() actually uses the max_size argument to constrain the size
+  of the top-level object.
+- gwyfile_read_file() determines the file size first for improved overrun
+  checks.
+- Miscellaneous documentation improvements.
+
+libgwyfile-0.8 (2014-12-14)
+- First public release.

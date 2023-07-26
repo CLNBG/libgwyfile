@@ -1,0 +1,125 @@
+
+Libgwyfile is a small MIT-licensed embeddable library that provides functions
+for reading and writing of Gwyddion GWY files. It contains functions for both
+the generic GWY file format and specific data structures actually used by
+Gwyddion to represent scanning probe microscopy data.
+
+Website: http://libgwyfile.sourceforge.net/
+Author:  Yeti <yeti@gwyddion.net>
+
+-----------------------------------------------------------------------------
+
+0. REQUIREMENTS
+
+An ISO C compiler providing a few C99 features, in particular:
+- the inline keyword
+- stdbool.h
+- stdint.h
+
+Libgwyfile has no external dependencies.
+
+-----------------------------------------------------------------------------
+
+1. BUILDING AS A NORMAL (SHARED/STATIC) LIBRARY ON UNIX
+
+This may be a good start even if you intend to embed the library to ensure it
+works fine on your system.
+
+Libgwyfile uses GNU autotools so run
+
+    ./configure [--prefix=...]
+    make
+    make install
+
+as usual to build it.
+
+Documentation.  If you have doxygen you can run
+
+    make doc
+
+to HTML build API reference documentation in lib/doc/.  Read it on-line
+otherwise.
+
+Tests.  If you have valgrind you can run
+
+    make check
+
+to run the tests.  It runs each test program once normally and once under
+valgrind.  Of course, the tests can be run also without valgrind.  However, as
+most of them specifically excersise ownership transfer and memory handling they
+are much more meaningful under valgrind.
+
+You might be able to run tests normally but not under valgrind.  This can
+typically happen when you are cross-compiling and have a binary interpreter for
+the host system (such as wine), but not valgrind.  In such case either pass
+--without-valgrind to configure or use
+
+    make check valgrind_tests=
+
+-----------------------------------------------------------------------------
+
+2. WIN32 CROSS-COMPILATION ON UNIX
+
+Usually, you would just embed the gwyfile.[ch] into your Win32 project.
+Anyway, cross-compilation on Unix is possible and if you have Wine you can run
+the examples and the tests (and they should pass).
+
+Run configure as
+
+    ./configure --prefix=<PREFIX> --host=<HOST> --build=<BUILD>
+
+where <HOST> is either i686-w64-mingw32 or x86_64-w64-mingw32 depending on the
+target architecture (32bit or 64bit) and <BUILD> is whatever the config.guess
+script from Automake prints on your system.  It is typically something like
+x86_64-unknown-linux-gnu.
+
+In principle you do not need to pass the --build option.  However, if you have
+Wine installed to run the tests and examples and the correspondign executable
+format handler is registered, configure may fall under the impression you are
+doing a native compilation (as opposed to cross-compiling).  Specifying the
+--build option ensures the build is seen as a cross-compilation.
+
+The final DLLs are produced upon installation (make install) so you have to
+do that to get them.  Specify any temporary <PREFIX> of your choice as it
+makes little sense to do a system-wide installation in this case.
+
+-----------------------------------------------------------------------------
+
+3. BUILDING AS A NORMAL LIBRARY WITH MSVC
+
+MSVC 2015 project files are provided in subdirectory msvc2015.  The SLN file
+is located in msvc2015/libgwyfile.  The files use relative paths to the
+source and should work from the location where they distributed in the
+archive.
+
+-----------------------------------------------------------------------------
+
+4. EMBEDDING THE LIBRARY
+
+The entire library consists of two C files in lib:
+
+    gwyfile.h (the header)
+    gwyfile.c (the implementation)
+
+Just copy them to your program.
+
+See the top of gwyfile.c for preprocessor defines that you may want to adjust
+to define the system configuration.  Most importantly, ensure the library is
+built for the correct byte order (little/big endian).  Alternatively, you can
+provide a config.h that defines the system configuration.
+
+If your C compiler does not support C99 features such as the bool type or
+inline keyword, see the top of gwyfile.c for some possible remedies.
+
+-----------------------------------------------------------------------------
+
+5. USAGE EXAMPLES
+
+See the files in examples subdirectory:
+- readgwy (reads Gwyddion GWY files and print some information about the data)
+- writegwy (writes a simple Gwyddion GWY file with some channel and graph)
+- readgeneric (reads generic GWY files and prints their structure)
+- writegeneric (writes a simple generic GWY file)
+- checkgeneric (checks GWY files for problems that go against the specs but
+  do not prevent libgwyfile from loading the file)
+
